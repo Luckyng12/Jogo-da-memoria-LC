@@ -3,46 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memória do Espaço Digital</title>
+    <title>Memória e Galeria - Espaços Digitais</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@800&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #e0f7fa; /* Fundo azul claro */
+            background-color: #e0f7fa;
             font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column; 
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            min-height: 100vh;
         }
 
+        /* --- Estilos Comuns --- */
+        .page-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* --- Estilos do Jogo --- */
         .header-info {
             width: 100%;
             max-width: 1000px;
             text-align: center;
             margin-bottom: 20px;
         }
-
         .title-memoria {
-            font-family: 'Orbitron', sans-serif; /* Nova fonte aplicada */
+            font-family: 'Orbitron', sans-serif;
             color: #1a5276; 
             font-size: 2.5rem;
             font-weight: 800;
         }
-
         .subtitle-memoria {
             color: #e74c3c;
             font-size: 1.3rem;
             margin-top: -10px;
             font-weight: 600;
         }
-
         .game-board {
             display: grid;
             grid-template-columns: repeat(5, 18vw); 
@@ -52,28 +58,6 @@
             justify-content: center;
             max-width: 1200px;
         }
-        
-        @media (max-width: 768px) {
-            .game-board {
-                grid-template-columns: repeat(4, 20vw); 
-                grid-template-rows: repeat(3, 20vh); 
-                gap: 10px;
-            }
-            .title-memoria {
-                font-size: 1.8rem;
-            }
-        }
-        @media (max-width: 480px) {
-            .game-board {
-                grid-template-columns: repeat(2, 40vw);
-                grid-template-rows: repeat(5, 15vh);
-            }
-             .title-memoria {
-                font-size: 1.5rem;
-            }
-        }
-
-
         .card {
             width: 100%;
             height: 100%;
@@ -83,11 +67,9 @@
             cursor: pointer;
             border-radius: 8px;
         }
-
         .card.flip {
             transform: rotateY(180deg);
         }
-
         .face, .back {
             width: 100%;
             height: 100%;
@@ -100,16 +82,14 @@
             align-items: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
-
         .back {
             background-color: #2d5b9c; 
             transform: rotateY(0deg);
-            background-image: url('LogoCursoLC_Menor.png'); 
+            background-image: url('LogoCursoLC_Menor.jpg'); 
             background-size: 60%;
             background-repeat: no-repeat;
             background-position: center;
         }
-
         .face {
             background-color: #ecf0f1; 
             transform: rotateY(180deg); 
@@ -118,34 +98,31 @@
             box-sizing: border-box;
             justify-content: space-around;
         }
-
         .face img {
             max-width: 95%;
             max-height: 75%;
             object-fit: cover;
             border-radius: 4px;
         }
-        
         .face p {
             margin: 5px 0 0 0;
-            font-size: clamp(0.65rem, 1.5vw, 0.9rem); /* Fonte ajustada */
+            font-size: clamp(0.65rem, 1.5vw, 0.9rem);
             font-weight: bold;
             color: #2c3e50;
-            text-align: center; /* Centraliza o texto */
-            line-height: 1.1; /* Espaçamento entre linhas reduzido */
+            text-align: center;
+            line-height: 1.1;
         }
-        
         .card.match {
             visibility: hidden;
             opacity: 0;
             transition: visibility 0s 0.8s, opacity 0.8s linear;
         }
-
         .info-bar {
             margin-top: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
             font-size: 1.2rem;
             padding: 10px 0;
             font-weight: 600;
@@ -153,114 +130,135 @@
             width: 100%;
             max-width: 1000px;
         }
-
         #restart-button {
             background-color: #e74c3c;
             transition: transform 0.2s;
         }
-        
         #restart-button:hover {
             transform: scale(1.05);
             background-color: #c0392b;
         }
 
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
+        /* --- Estilos da Galeria Final (Ajustados para caber na tela) --- */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            transform: scale(0.8);
-            transition: transform 0.3s ease-out;
-            max-width: 600px;
-            width: 100%;
         }
-        .modal.active .modal-content {
-            transform: scale(1);
+        .gallery-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #1a5276;
+            font-size: 2.2rem; /* Reduzido */
+            margin-bottom: 25px; /* Reduzido */
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; /* Reduzido */
+        }
+        .gallery-item {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 180px; /* Reduzido */
+            object-fit: cover;
+        }
+        .gallery-item-label {
+            padding: 12px; /* Reduzido */
+            font-size: 1rem; /* Reduzido */
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .restart-gallery-button {
+            display: inline-block;
+            margin-top: 30px; /* Reduzido */
+            padding: 12px 30px;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+        .restart-gallery-button:hover {
+            background-color: #229954;
+            transform: scale(1.05);
+        }
+        
+        /* Media Queries para responsividade */
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: repeat(4, 20vw); 
+                grid-template-rows: repeat(3, 20vh); 
+                gap: 10px;
+            }
+            .title-memoria, .gallery-title { font-size: 1.8rem; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 15px; }
+            .game-board {
+                grid-template-columns: repeat(2, 40vw);
+                grid-template-rows: repeat(5, 15vh);
+            }
+            .title-memoria, .gallery-title { font-size: 1.5rem; }
+            .info-bar { flex-direction: column; gap: 15px;}
         }
 
-        .summary-grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .summary-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .summary-item img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid #ddd;
-        }
-        .summary-item p {
-            margin-top: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #333;
-        }
     </style>
 </head>
 <body>
 
-    <div class="header-info">
-        <h1 class="title-memoria">Memória do Espaço Digital</h1>
-        <h2 class="subtitle-memoria">ENCONTRE TODOS OS PARES</h2>
-    </div>
+    <!-- Seção do Jogo (Visível por padrão) -->
+    <main id="game-section" class="page-section">
+        <div class="header-info">
+            <h1 class="title-memoria">Memória do Espaço Digital</h1>
+            <h2 class="subtitle-memoria">ENCONTRE TODOS OS PARES</h2>
+        </div>
+        
+        <section class="game-board">
+            <!-- Cartas serão inseridas aqui -->
+        </section>
     
-    <section class="game-board">
-        <!-- Cartas serão inseridas aqui -->
-    </section>
+        <div class="info-bar">
+            <p>Pares Encontrados: <span id="score" class="font-extrabold">0</span> / 5</p>
+            <button id="restart-button" class="px-5 py-2 text-white rounded-lg shadow-md">Reiniciar Jogo</button>
+        </div>
+    </main>
 
-    <div class="info-bar">
-        <p>Pares Encontrados: <span id="score" class="font-extrabold">0</span> / 5</p>
-        <button id="restart-button" class="px-5 py-2 text-white rounded-lg shadow-md">Reiniciar Jogo</button>
-    </div>
-
-    <!-- Modal de Resumo das Salas -->
-    <div id="summary-modal" class="modal">
-        <div class="modal-content">
-            <h3 class="text-3xl font-bold text-gray-800 mb-4">Nossos Espaços Digitais</h3>
-            <div id="summary-grid" class="summary-grid-container">
-                <!-- Imagens e nomes dos laboratórios serão gerados aqui -->
+    <!-- Seção da Galeria Final (Oculta por padrão) -->
+    <section id="gallery-section" class="page-section hidden">
+        <div class="gallery-container">
+            <h1 class="gallery-title">Salas utilizadas em Licenciatura em Computação</h1>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="LABINF01.jpg" alt="Foto do Laboratório de Informática 01">
+                    <p class="gallery-item-label">Laboratório de Informática 01</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="LABINF02.jpg" alt="Foto do Laboratório de Informática 02">
+                    <p class="gallery-item-label">Laboratório de Informática 02</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="LAPPIE.jpg" alt="Foto do Lappie">
+                    <p class="gallery-item-label">Lappie</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="BIBLIOTECA.jpg" alt="Foto da Biblioteca">
+                    <p class="gallery-item-label">Biblioteca</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="LCC.jpg" alt="Foto do LCC">
+                    <p class="gallery-item-label">LCC - Laboratório de Computação Criativa</p>
+                </div>
             </div>
-            <button id="continue-to-win" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition duration-150">
-                Continuar
-            </button>
+            <button class="restart-gallery-button">Reiniciar Partida</button>
         </div>
-    </div>
-
-    <!-- Modal de Vitória -->
-    <div id="win-modal" class="modal">
-        <div class="modal-content">
-            <h3 class="text-3xl font-bold text-gray-800 mb-4">PARABÉNS! VOCÊ VENCEU!</h3>
-            <p class="text-xl text-gray-800 mb-6">Você desvendou todos os espaços digitais!</p>
-            <button id="confirm-restart" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-150">
-                Reiniciar Partida
-            </button>
-        </div>
-    </div>
+    </section>
 
     <script>
         const cardArray = [
@@ -276,11 +274,10 @@
         const board = document.querySelector('.game-board');
         const scoreDisplay = document.getElementById('score');
         const restartButton = document.getElementById('restart-button');
-        const winModal = document.getElementById('win-modal');
-        const confirmRestartButton = document.getElementById('confirm-restart');
-        const summaryModal = document.getElementById('summary-modal');
-        const summaryGrid = document.getElementById('summary-grid');
-        const continueToWinButton = document.getElementById('continue-to-win');
+        
+        const gameSection = document.getElementById('game-section');
+        const gallerySection = document.getElementById('gallery-section');
+        const galleryRestartButton = document.querySelector('#gallery-section .restart-gallery-button');
 
         let firstCard = null;
         let secondCard = null;
@@ -294,7 +291,7 @@
         function createBoard() {
             shuffleCards(); 
 
-            gameCards.forEach((card, index) => {
+            gameCards.forEach((card) => {
                 const cardElement = document.createElement('div');
                 cardElement.classList.add('card');
                 cardElement.dataset.name = card.name;
@@ -358,8 +355,10 @@
             resetBoard(); 
 
             setTimeout(() => {
-                matchedCard1.classList.add('match'); 
-                matchedCard2.classList.add('match');
+                if(matchedCard1 && matchedCard2) {
+                    matchedCard1.classList.add('match'); 
+                    matchedCard2.classList.add('match');
+                }
                 
                 if (matches === cardArray.length) { 
                     setTimeout(endGame, 800);
@@ -382,41 +381,19 @@
         }
 
         function endGame() {
-            summaryModal.classList.add('active');
-        }
-
-        function populateSummaryModal() {
-            summaryGrid.innerHTML = '';
-            cardArray.forEach(card => {
-                const item = document.createElement('div');
-                item.classList.add('summary-item');
-                const img = document.createElement('img');
-                img.src = card.imgSrc;
-                img.alt = card.label;
-                const label = document.createElement('p');
-                label.textContent = card.label;
-                item.appendChild(img);
-                item.appendChild(label);
-                summaryGrid.appendChild(item);
-            });
+            gameSection.classList.add('hidden');
+            gallerySection.classList.remove('hidden');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             createBoard();
-            populateSummaryModal();
             
             restartButton.addEventListener('click', () => {
-                setTimeout(() => window.location.reload(), 100); 
-            });
-
-            confirmRestartButton.addEventListener('click', () => {
-                winModal.classList.remove('active');
                 window.location.reload(); 
             });
 
-            continueToWinButton.addEventListener('click', () => {
-                summaryModal.classList.remove('active');
-                winModal.classList.add('active');
+            galleryRestartButton.addEventListener('click', () => {
+                window.location.reload();
             });
         });
     </script>

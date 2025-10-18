@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memória do Espaço Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e0f7fa; /* Fundo azul claro */
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header-info {
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title-memoria {
+            font-family: 'Orbitron', sans-serif; /* Nova fonte aplicada */
+            color: #1a5276; 
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .subtitle-memoria {
+            color: #e74c3c;
+            font-size: 1.3rem;
+            margin-top: -10px;
+            font-weight: 600;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 18vw); 
+            grid-template-rows: repeat(2, 25vh); 
+            gap: 15px; 
+            perspective: 1000px; 
+            justify-content: center;
+            max-width: 1200px;
+        }
+        
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: repeat(4, 20vw); 
+                grid-template-rows: repeat(3, 20vh); 
+                gap: 10px;
+            }
+            .title-memoria {
+                font-size: 1.8rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .game-board {
+                grid-template-columns: repeat(2, 40vw);
+                grid-template-rows: repeat(5, 15vh);
+            }
+             .title-memoria {
+                font-size: 1.5rem;
+            }
+        }
+
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .card.flip {
+            transform: rotateY(180deg);
+        }
+
+        .face, .back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            border-radius: 8px;
+            border: 3px solid #2d5b9c; 
+            backface-visibility: hidden; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back {
+            background-color: #2d5b9c; 
+            transform: rotateY(0deg);
+            background-image: url('LogoCursoLC_Menor.png'); 
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .face {
+            background-color: #ecf0f1; 
+            transform: rotateY(180deg); 
+            flex-direction: column;
+            padding: 8px;
+            box-sizing: border-box;
+            justify-content: space-around;
+        }
+
+        .face img {
+            max-width: 95%;
+            max-height: 75%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        
+        .face p {
+            margin: 5px 0 0 0;
+            font-size: clamp(0.7rem, 1.5vw, 1rem);
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .card.match {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 0.8s, opacity 0.8s linear;
+        }
+
+        .info-bar {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            padding: 10px 0;
+            font-weight: 600;
+            color: #2c3e50; /* Cor do texto alterada para escura */
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        #restart-button {
+            background-color: #e74c3c;
+            transition: transform 0.2s;
+        }
+        
+        #restart-button:hover {
+            transform: scale(1.05);
+            background-color: #c0392b;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s ease-out;
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-info">
+        <h1 class="title-memoria">Memória do Espaço Digital</h1>
+        <h2 class="subtitle-memoria">ENCONTRE TODOS OS PARES</h2>
+    </div>
+    
+    <section class="game-board">
+        <!-- Cartas serão inseridas aqui -->
+    </section>
+
+    <div class="info-bar">
+        <p>Pares Encontrados: <span id="score" class="font-extrabold">0</span> / 5</p>
+        <button id="restart-button" class="px-5 py-2 text-white rounded-lg shadow-md">Reiniciar Jogo</button>
+    </div>
+
+    <div id="win-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">PARABÉNS! VOCÊ VENCEU!</h3>
+            <p class="text-xl text-gray-800 mb-6">Você desvendou todos os espaços digitais!</p>
+            <button id="confirm-restart" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-150">
+                Reiniciar Partida
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const cardArray = [
+            { name: 'labinf01', imgSrc: 'LABINF01.jpg', label: 'Laboratório de Informática 01' },
+            { name: 'labinf02', imgSrc: 'LABINF02.jpg', label: 'Laboratório de Informática 02' },
+            { name: 'lappie', imgSrc: 'LAPPIE.jpg', label: 'Lappie' },
+            { name: 'biblioteca', imgSrc: 'BIBLIOTECA.jpg', label: 'Biblioteca' },
+            { name: 'lcc', imgSrc: 'LCC.jpg', label: 'LCC - Laboratório de Computação Criativa' }
+        ];
+
+        const gameCards = [...cardArray, ...cardArray];
+
+        const board = document.querySelector('.game-board');
+        const scoreDisplay = document.getElementById('score');
+        const restartButton = document.getElementById('restart-button');
+        const winModal = document.getElementById('win-modal');
+        const confirmRestartButton = document.getElementById('confirm-restart');
+
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+        let matches = 0;
+
+        function shuffleCards() {
+            gameCards.sort(() => Math.random() - 0.5); 
+        }
+
+        function createBoard() {
+            shuffleCards(); 
+
+            gameCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.dataset.name = card.name;
+
+                const backFace = document.createElement('div');
+                backFace.classList.add('back');
+
+                const frontFace = document.createElement('div');
+                frontFace.classList.add('face');
+                
+                const img = document.createElement('img');
+                img.src = card.imgSrc;
+                img.alt = card.label;
+
+                const label = document.createElement('p');
+                label.textContent = card.label;
+
+                frontFace.appendChild(img);
+                frontFace.appendChild(label);
+
+                cardElement.appendChild(backFace);
+                cardElement.appendChild(frontFace);
+                board.appendChild(cardElement);
+
+                cardElement.addEventListener('click', flipCard);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard || this.classList.contains('flip') || this.classList.contains('match')) return; 
+            
+            if (this === firstCard) return; 
+
+            this.classList.add('flip');
+
+            if (!firstCard) {
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            lockBoard = true; 
+            
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            const isMatch = firstCard.dataset.name === secondCard.dataset.name;
+
+            if (isMatch) {
+                disableCards();
+            } else {
+                unflipCards();
+            }
+        }
+
+        function disableCards() {
+            const matchedCard1 = firstCard;
+            const matchedCard2 = secondCard;
+            
+            matchedCard1.removeEventListener('click', flipCard);
+            matchedCard2.removeEventListener('click', flipCard);
+
+            matches++;
+            scoreDisplay.textContent = matches;
+            
+            resetBoard(); 
+
+            setTimeout(() => {
+                matchedCard1.classList.add('match'); 
+                matchedCard2.classList.add('match');
+                
+                if (matches === cardArray.length) { 
+                    setTimeout(endGame, 800);
+                }
+            }, 2000); 
+        }
+
+        function unflipCards() {
+            setTimeout(() => {
+                firstCard.classList.remove('flip');
+                secondCard.classList.remove('flip');
+                resetBoard();
+            }, 2000);
+        }
+
+        function resetBoard() {
+            [firstCard, secondCard, lockBoard] = [null, null, false];
+        }
+
+        function endGame() {
+            winModal.classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createBoard();
+            
+            restartButton.addEventListener('click', () => {
+                setTimeout(() => window.location.reload(), 100); 
+            });
+
+            confirmRestartButton.addEventListener('click', () => {
+                winModal.classList.remove('active');
+                window.location.reload(); 
+            });
+        });
+    </script>
+</body>
+</html>
+

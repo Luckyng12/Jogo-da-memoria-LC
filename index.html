@@ -128,9 +128,11 @@
         
         .face p {
             margin: 5px 0 0 0;
-            font-size: clamp(0.7rem, 1.5vw, 1rem);
+            font-size: clamp(0.65rem, 1.5vw, 0.9rem); /* Fonte ajustada */
             font-weight: bold;
             color: #2c3e50;
+            text-align: center; /* Centraliza o texto */
+            line-height: 1.1; /* Espaçamento entre linhas reduzido */
         }
         
         .card.match {
@@ -147,7 +149,7 @@
             font-size: 1.2rem;
             padding: 10px 0;
             font-weight: 600;
-            color: #2c3e50; /* Cor do texto alterada para escura */
+            color: #2c3e50;
             width: 100%;
             max-width: 1000px;
         }
@@ -173,6 +175,8 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 15px;
+            box-sizing: border-box;
         }
         .modal.active {
             display: flex;
@@ -185,9 +189,36 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             transform: scale(0.8);
             transition: transform 0.3s ease-out;
+            max-width: 600px;
+            width: 100%;
         }
         .modal.active .modal-content {
             transform: scale(1);
+        }
+
+        .summary-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .summary-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+        .summary-item p {
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #333;
         }
     </style>
 </head>
@@ -207,6 +238,20 @@
         <button id="restart-button" class="px-5 py-2 text-white rounded-lg shadow-md">Reiniciar Jogo</button>
     </div>
 
+    <!-- Modal de Resumo das Salas -->
+    <div id="summary-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">Nossos Espaços Digitais</h3>
+            <div id="summary-grid" class="summary-grid-container">
+                <!-- Imagens e nomes dos laboratórios serão gerados aqui -->
+            </div>
+            <button id="continue-to-win" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition duration-150">
+                Continuar
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Vitória -->
     <div id="win-modal" class="modal">
         <div class="modal-content">
             <h3 class="text-3xl font-bold text-gray-800 mb-4">PARABÉNS! VOCÊ VENCEU!</h3>
@@ -233,6 +278,9 @@
         const restartButton = document.getElementById('restart-button');
         const winModal = document.getElementById('win-modal');
         const confirmRestartButton = document.getElementById('confirm-restart');
+        const summaryModal = document.getElementById('summary-modal');
+        const summaryGrid = document.getElementById('summary-grid');
+        const continueToWinButton = document.getElementById('continue-to-win');
 
         let firstCard = null;
         let secondCard = null;
@@ -277,7 +325,6 @@
 
         function flipCard() {
             if (lockBoard || this.classList.contains('flip') || this.classList.contains('match')) return; 
-            
             if (this === firstCard) return; 
 
             this.classList.add('flip');
@@ -295,12 +342,7 @@
 
         function checkForMatch() {
             const isMatch = firstCard.dataset.name === secondCard.dataset.name;
-
-            if (isMatch) {
-                disableCards();
-            } else {
-                unflipCards();
-            }
+            isMatch ? disableCards() : unflipCards();
         }
 
         function disableCards() {
@@ -327,8 +369,10 @@
 
         function unflipCards() {
             setTimeout(() => {
-                firstCard.classList.remove('flip');
-                secondCard.classList.remove('flip');
+                if (firstCard && secondCard) {
+                    firstCard.classList.remove('flip');
+                    secondCard.classList.remove('flip');
+                }
                 resetBoard();
             }, 2000);
         }
@@ -338,11 +382,28 @@
         }
 
         function endGame() {
-            winModal.classList.add('active');
+            summaryModal.classList.add('active');
+        }
+
+        function populateSummaryModal() {
+            summaryGrid.innerHTML = '';
+            cardArray.forEach(card => {
+                const item = document.createElement('div');
+                item.classList.add('summary-item');
+                const img = document.createElement('img');
+                img.src = card.imgSrc;
+                img.alt = card.label;
+                const label = document.createElement('p');
+                label.textContent = card.label;
+                item.appendChild(img);
+                item.appendChild(label);
+                summaryGrid.appendChild(item);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             createBoard();
+            populateSummaryModal();
             
             restartButton.addEventListener('click', () => {
                 setTimeout(() => window.location.reload(), 100); 
@@ -352,9 +413,13 @@
                 winModal.classList.remove('active');
                 window.location.reload(); 
             });
+
+            continueToWinButton.addEventListener('click', () => {
+                summaryModal.classList.remove('active');
+                winModal.classList.add('active');
+            });
         });
     </script>
 </body>
 </html>
-
 

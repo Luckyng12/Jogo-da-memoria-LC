@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memória e Galeria - Espaços Digitais</title>
+    <title>Jogo da memória - Espaços Digitais</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,9 +16,11 @@
             padding: 20px;
             box-sizing: border-box;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* --- Estilos Comuns --- */
         .page-section {
             display: flex;
             flex-direction: column;
@@ -30,7 +32,6 @@
             display: none;
         }
 
-        /* --- Estilos do Jogo --- */
         .header-info {
             width: 100%;
             max-width: 1000px;
@@ -130,16 +131,66 @@
             width: 100%;
             max-width: 1000px;
         }
-        #restart-button {
-            background-color: #e74c3c;
-            transition: transform 0.2s;
+        .info-box {
+            flex: 1;
+            text-align: center;
         }
-        #restart-button:hover {
-            transform: scale(1.05);
-            background-color: #c0392b;
+        .info-box:first-child { text-align: left; }
+        .info-box:last-child { text-align: right; }
+        
+        #start-button {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            background-color: #27ae60;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            border: none;
+        }
+        #start-button:hover {
+             background-color: #229954;
+             transform: scale(1.05);
         }
 
-        /* --- Estilos da Galeria Final (Ajustados para caber na tela) --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); display: none; justify-content: center;
+            align-items: center; z-index: 1000;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white; padding: 30px 40px; border-radius: 12px;
+            text-align: center; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            transform: scale(0.8); transition: transform 0.3s ease-out;
+        }
+        .modal.active .modal-content { transform: scale(1); }
+        .modal-button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        #lose-continue-button {
+            background-color: #3498db;
+        }
+        #lose-continue-button:hover {
+            background-color: #2980b9;
+        }
+         #win-continue-button {
+            background-color: #27ae60;
+        }
+        #win-continue-button:hover {
+            background-color: #229954;
+        }
+
         .gallery-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -148,13 +199,13 @@
         .gallery-title {
             font-family: 'Orbitron', sans-serif;
             color: #1a5276;
-            font-size: 2.2rem; /* Reduzido */
-            margin-bottom: 25px; /* Reduzido */
+            font-size: 2.2rem;
+            margin-bottom: 15px;
         }
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px; /* Reduzido */
+            gap: 20px;
         }
         .gallery-item {
             background-color: white;
@@ -164,18 +215,18 @@
         }
         .gallery-item img {
             width: 100%;
-            height: 180px; /* Reduzido */
+            height: 180px;
             object-fit: cover;
         }
         .gallery-item-label {
-            padding: 12px; /* Reduzido */
-            font-size: 1rem; /* Reduzido */
+            padding: 12px;
+            font-size: 1rem;
             font-weight: 600;
             color: #2c3e50;
         }
         .restart-gallery-button {
             display: inline-block;
-            margin-top: 30px; /* Reduzido */
+            margin-top: 30px;
             padding: 12px 30px;
             background-color: #27ae60;
             color: white;
@@ -190,7 +241,50 @@
             transform: scale(1.05);
         }
         
-        /* Media Queries para responsividade */
+        .final-stats {
+            margin-top: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .final-stats p {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 600;
+            margin: 0;
+        }
+        .final-stats span {
+            font-weight: 800;
+        }
+        #win-modal .final-stats span, #gallery-section .final-stats span {
+             color: #27ae60;
+        }
+        #lose-modal .final-stats {
+            max-width: 100%;
+            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 10px;
+        }
+         #win-modal .final-stats {
+            max-width: 100%;
+            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #lose-modal .final-stats span {
+            color: #e74c3c;
+        }
+
+
         @media (max-width: 768px) {
             .game-board {
                 grid-template-columns: repeat(4, 20vw); 
@@ -198,6 +292,8 @@
                 gap: 10px;
             }
             .title-memoria, .gallery-title { font-size: 1.8rem; }
+            .info-bar { flex-direction: column; gap: 15px; }
+            .info-box, .info-box:first-child, .info-box:last-child { text-align: center; }
         }
         @media (max-width: 480px) {
             body { padding: 15px; }
@@ -206,31 +302,33 @@
                 grid-template-rows: repeat(5, 15vh);
             }
             .title-memoria, .gallery-title { font-size: 1.5rem; }
-            .info-bar { flex-direction: column; gap: 15px;}
         }
 
     </style>
 </head>
 <body>
 
-    <!-- Seção do Jogo (Visível por padrão) -->
     <main id="game-section" class="page-section">
         <div class="header-info">
             <h1 class="title-memoria">Memória do Espaço Digital</h1>
             <h2 class="subtitle-memoria">ENCONTRE TODOS OS PARES</h2>
         </div>
         
-        <section class="game-board">
-            <!-- Cartas serão inseridas aqui -->
-        </section>
+        <section class="game-board"></section>
     
         <div class="info-bar">
-            <p>Pares Encontrados: <span id="score" class="font-extrabold">0</span> / 5</p>
-            <button id="restart-button" class="px-5 py-2 text-white rounded-lg shadow-md">Reiniciar Jogo</button>
+            <div class="info-box">
+                <p>Pares: <span id="score" class="font-extrabold">0</span> / 5</p>
+            </div>
+            <div class="info-box">
+                <p>Tempo: <span id="timer" class="font-extrabold">--:--</span></p>
+            </div>
+            <div class="info-box">
+                <p>Erros: <span id="errors" class="font-extrabold">0</span></p>
+            </div>
         </div>
     </main>
 
-    <!-- Seção da Galeria Final (Oculta por padrão) -->
     <section id="gallery-section" class="page-section hidden">
         <div class="gallery-container">
             <h1 class="gallery-title">Salas utilizadas em Licenciatura em Computação</h1>
@@ -260,6 +358,38 @@
         </div>
     </section>
 
+    <div id="start-modal" class="modal active">
+        <div class="modal-content">
+            <h1 class="title-memoria mb-4 text-3xl">Memória do Espaço Digital</h1>
+            <button id="start-button">Iniciar Jogo</button>
+        </div>
+    </div>
+
+    <div id="win-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-3xl font-bold text-green-600 mb-4">PARABÉNS!</h3>
+            <p class="text-xl text-gray-800">Você encontrou todas as salas.</p>
+            <div class="final-stats">
+                 <p>Tempo Jogado: <span id="win-time">--:--</span></p>
+                 <p>Erros: <span id="win-errors">0</span></p>
+                 <p>Pares Encontrados: <span>5</span></p>
+            </div>
+            <button id="win-continue-button" class="modal-button">Ver Galeria</button>
+        </div>
+    </div>
+
+    <div id="lose-modal" class="modal">
+        <div class="modal-content">
+            <p class="text-2xl font-bold text-red-600 mb-4">Você perdeu, não encontrou todas as salas a tempo.</p>
+             <div class="final-stats">
+                 <p>Tempo Jogado: <span id="lose-time">--:--</span></p>
+                 <p>Erros: <span id="lose-errors">0</span></p>
+                 <p>Pares Encontrados: <span id="lose-matches">0</span></p>
+            </div>
+            <button id="lose-continue-button" class="modal-button">Seguir</button>
+        </div>
+    </div>
+
     <script>
         const cardArray = [
             { name: 'labinf01', imgSrc: 'LABINF01.jpg', label: 'Laboratório de Informática 01' },
@@ -271,18 +401,77 @@
 
         const gameCards = [...cardArray, ...cardArray];
 
-        const board = document.querySelector('.game-board');
-        const scoreDisplay = document.getElementById('score');
-        const restartButton = document.getElementById('restart-button');
-        
+        const startModal = document.getElementById('start-modal');
+        const startButton = document.getElementById('start-button');
         const gameSection = document.getElementById('game-section');
         const gallerySection = document.getElementById('gallery-section');
+        
+        const board = document.querySelector('.game-board');
+        const scoreDisplay = document.getElementById('score');
+        const errorsDisplay = document.getElementById('errors');
+        const timerDisplay = document.getElementById('timer');
+        
+        const winModal = document.getElementById('win-modal');
+        const winContinueButton = document.getElementById('win-continue-button');
+        const loseModal = document.getElementById('lose-modal');
+        const loseContinueButton = document.getElementById('lose-continue-button');
         const galleryRestartButton = document.querySelector('#gallery-section .restart-gallery-button');
 
         let firstCard = null;
         let secondCard = null;
         let lockBoard = false;
         let matches = 0;
+        let errors = 0;
+        let timeLeft = 90;
+        let timerInterval = null;
+
+        function startTimer() {
+            timeLeft = 90;
+            errors = 0;
+            errorsDisplay.textContent = errors;
+            timerDisplay.textContent = '1:30';
+            clearInterval(timerInterval); 
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                timerDisplay.textContent = `${minutes}:${seconds}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleLose();
+                }
+            }, 1000);
+        }
+        
+        function updateFinalStats() {
+            const timePlayed = 90 - timeLeft;
+            const minutes = Math.floor(timePlayed / 60);
+            let seconds = timePlayed % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            const formattedTime = `${minutes}:${seconds}`;
+
+            document.getElementById('lose-time').textContent = formattedTime;
+            document.getElementById('lose-errors').textContent = errors;
+            document.getElementById('lose-matches').textContent = matches;
+
+            document.getElementById('win-time').textContent = formattedTime;
+            document.getElementById('win-errors').textContent = errors;
+        }
+
+        function handleLose() {
+            lockBoard = true;
+            updateFinalStats();
+            loseModal.classList.add('active');
+        }
+
+        function handleWin() {
+            lockBoard = true;
+            updateFinalStats();
+            winModal.classList.add('active');
+        }
 
         function shuffleCards() {
             gameCards.sort(() => Math.random() - 0.5); 
@@ -290,6 +479,12 @@
 
         function createBoard() {
             shuffleCards(); 
+            board.innerHTML = '';
+            matches = 0;
+            scoreDisplay.textContent = 0;
+            errorsDisplay.textContent = 0;
+            timerDisplay.textContent = '--:--';
+
 
             gameCards.forEach((card) => {
                 const cardElement = document.createElement('div');
@@ -361,12 +556,15 @@
                 }
                 
                 if (matches === cardArray.length) { 
-                    setTimeout(endGame, 800);
+                    clearInterval(timerInterval);
+                    setTimeout(handleWin, 800);
                 }
             }, 2000); 
         }
 
         function unflipCards() {
+            errors++;
+            errorsDisplay.textContent = errors;
             setTimeout(() => {
                 if (firstCard && secondCard) {
                     firstCard.classList.remove('flip');
@@ -380,7 +578,7 @@
             [firstCard, secondCard, lockBoard] = [null, null, false];
         }
 
-        function endGame() {
+        function showGallery() {
             gameSection.classList.add('hidden');
             gallerySection.classList.remove('hidden');
         }
@@ -388,8 +586,19 @@
         document.addEventListener('DOMContentLoaded', () => {
             createBoard();
             
-            restartButton.addEventListener('click', () => {
-                window.location.reload(); 
+            startButton.addEventListener('click', () => {
+                startModal.classList.remove('active');
+                startTimer();
+            });
+
+            loseContinueButton.addEventListener('click', () => {
+                loseModal.classList.remove('active');
+                showGallery();
+            });
+
+            winContinueButton.addEventListener('click', () => {
+                winModal.classList.remove('active');
+                showGallery();
             });
 
             galleryRestartButton.addEventListener('click', () => {
@@ -399,5 +608,4 @@
     </script>
 </body>
 </html>
-
 

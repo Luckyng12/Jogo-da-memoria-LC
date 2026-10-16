@@ -18,7 +18,7 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .page-section {
@@ -27,9 +27,11 @@
             justify-content: center;
             align-items: center;
             width: 100%;
+            padding: 20px 0;
         }
+        
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .header-info {
@@ -138,10 +140,9 @@
         .info-box:first-child { text-align: left; }
         .info-box:last-child { text-align: right; }
         
-        #start-button {
-            margin-top: 30px;
+        .btn-primary {
             padding: 15px 40px;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: white;
             background-color: #27ae60;
@@ -149,10 +150,17 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
             border: none;
+            margin: 10px;
         }
-        #start-button:hover {
+        .btn-primary:hover {
              background-color: #229954;
              transform: scale(1.05);
+        }
+        .btn-secondary {
+            background-color: #3498db;
+        }
+        .btn-secondary:hover {
+            background-color: #2980b9;
         }
 
         .modal {
@@ -165,31 +173,10 @@
             background: white; padding: 30px 40px; border-radius: 12px;
             text-align: center; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             transform: scale(0.8); transition: transform 0.3s ease-out;
+            max-width: 90%;
+            width: 500px;
         }
         .modal.active .modal-content { transform: scale(1); }
-        .modal-button {
-            margin-top: 20px;
-            padding: 10px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s;
-        }
-        #lose-continue-button {
-            background-color: #3498db;
-        }
-        #lose-continue-button:hover {
-            background-color: #2980b9;
-        }
-         #win-continue-button {
-            background-color: #27ae60;
-        }
-        #win-continue-button:hover {
-            background-color: #229954;
-        }
 
         .gallery-container {
             max-width: 1200px;
@@ -224,37 +211,18 @@
             font-weight: 600;
             color: #2c3e50;
         }
-        .restart-gallery-button {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 12px 30px;
-            background-color: #27ae60;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: background-color 0.3s, transform 0.2s;
-            cursor: pointer;
-        }
-        .restart-gallery-button:hover {
-            background-color: #229954;
-            transform: scale(1.05);
-        }
         
         .final-stats {
-            margin-top: 20px;
-            margin-bottom: 25px;
+            margin: 20px auto;
             display: flex;
             justify-content: space-around;
             gap: 20px;
             width: 100%;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
             background-color: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #dee2e6;
+            flex-direction: column;
         }
         .final-stats p {
             font-size: 1.1rem;
@@ -265,25 +233,61 @@
         .final-stats span {
             font-weight: 800;
         }
-        #win-modal .final-stats span, #gallery-section .final-stats span {
-             color: #27ae60;
-        }
-        #lose-modal .final-stats {
-            max-width: 100%;
-            margin-bottom: 20px;
-            flex-direction: column;
-            gap: 10px;
-        }
-         #win-modal .final-stats {
-            max-width: 100%;
-            margin-bottom: 20px;
-            flex-direction: column;
-            gap: 10px;
-        }
-        #lose-modal .final-stats span {
-            color: #e74c3c;
-        }
+        #win-modal .final-stats span { color: #27ae60; }
+        #win-modal .final-stats .rank-highlight { color: #1a5276; font-size: 1.3rem; }
+        #lose-modal .final-stats span { color: #e74c3c; }
 
+        .ranking-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+            width: 100%;
+        }
+        .ranking-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f1f5f9;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .ranking-item:nth-child(1) { background-color: #fef08a; border-left: 5px solid #eab308; }
+        .ranking-item:nth-child(2) { background-color: #e2e8f0; border-left: 5px solid #94a3b8; }
+        .ranking-item:nth-child(3) { background-color: #fed7aa; border-left: 5px solid #f97316; }
+
+        #custom-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-30px);
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease-out;
+        }
+        #custom-toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
 
         @media (max-width: 768px) {
             .game-board {
@@ -294,24 +298,54 @@
             .title-memoria, .gallery-title { font-size: 1.8rem; }
             .info-bar { flex-direction: column; gap: 15px; }
             .info-box, .info-box:first-child, .info-box:last-child { text-align: center; }
+            .ranking-item { flex-direction: column; text-align: center; gap: 5px; }
         }
         @media (max-width: 480px) {
-            body { padding: 15px; }
             .game-board {
                 grid-template-columns: repeat(2, 40vw);
                 grid-template-rows: repeat(5, 15vh);
             }
             .title-memoria, .gallery-title { font-size: 1.5rem; }
+            #custom-toast { font-size: 0.9rem; padding: 10px 15px; width: 90%; text-align: center; }
         }
-
     </style>
 </head>
 <body>
 
-    <main id="game-section" class="page-section">
+    <!-- Aviso Suave (Toast) -->
+    <div id="custom-toast">Por favor, digite seu nome para começar o jogo!</div>
+
+    <!-- Tela Inicial com Ranking -->
+    <section id="start-section" class="page-section">
+        <div class="header-info">
+            <h1 class="title-memoria text-4xl mb-2">Memória do Espaço Digital</h1>
+            <h2 class="subtitle-memoria">ENCONTRE TODOS OS PARES</h2>
+        </div>
+        
+        <div class="mb-4 mt-4 w-full max-w-sm">
+            <label for="player-name-input" class="block text-sm font-bold text-gray-700 mb-2 text-center">Digite seu nome para jogar:</label>
+            <input type="text" id="player-name-input" maxlength="15" placeholder="Seu nome..." class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center text-xl font-bold">
+        </div>
+
+        <button id="start-button" class="btn-primary mb-8">Iniciar Jogo</button>
+
+        <div class="ranking-container">
+            <h2 class="text-2xl font-bold text-center text-gray-800">Top 10 Jogadores</h2>
+            <p class="text-sm text-center text-gray-500 mb-4">
+                Classificado por Maior Pontuação Exata<br>
+                <span class="text-xs text-gray-400">Base: 10.000 | Penalidades: Tempo (-20/seg) e Erros (-150/erro)</span>
+            </p>
+            <ul id="start-ranking-list" class="ranking-list">
+                <!-- Injetado via JS -->
+            </ul>
+        </div>
+    </section>
+
+    <!-- Tela do Jogo -->
+    <main id="game-section" class="page-section hidden">
         <div class="header-info">
             <h1 class="title-memoria">Memória do Espaço Digital</h1>
-            <h2 class="subtitle-memoria">ENCONTRE TODOS OS PARES</h2>
+            <h2 class="subtitle-memoria">Jogador: <span id="display-player-name" class="text-blue-600"></span></h2>
         </div>
         
         <section class="game-board"></section>
@@ -321,7 +355,7 @@
                 <p>Pares: <span id="score" class="font-extrabold">0</span> / 5</p>
             </div>
             <div class="info-box">
-                <p>Tempo: <span id="timer" class="font-extrabold">--:--</span></p>
+                <p>Tempo: <span id="timer" class="font-extrabold">0:00.00</span></p>
             </div>
             <div class="info-box">
                 <p>Erros: <span id="errors" class="font-extrabold">0</span></p>
@@ -329,6 +363,7 @@
         </div>
     </main>
 
+    <!-- Tela da Galeria -->
     <section id="gallery-section" class="page-section hidden">
         <div class="gallery-container">
             <h1 class="gallery-title">Salas utilizadas em Licenciatura em Computação</h1>
@@ -354,39 +389,39 @@
                     <p class="gallery-item-label">LCC - Laboratório de Computação Criativa</p>
                 </div>
             </div>
-            <button class="restart-gallery-button">Reiniciar Partida</button>
+
+            <div class="mt-8 mb-4">
+                <button id="back-to-start-button" class="btn-primary btn-secondary">Tela Inicial</button>
+            </div>
         </div>
     </section>
 
-    <div id="start-modal" class="modal active">
-        <div class="modal-content">
-            <h1 class="title-memoria mb-4 text-3xl">Memória do Espaço Digital</h1>
-            <button id="start-button">Iniciar Jogo</button>
-        </div>
-    </div>
-
+    <!-- Modal de Vitória -->
     <div id="win-modal" class="modal">
         <div class="modal-content">
-            <h3 class="text-3xl font-bold text-green-600 mb-4">PARABÉNS!</h3>
-            <p class="text-xl text-gray-800">Você encontrou todas as salas.</p>
+            <h3 class="text-3xl font-bold text-green-600 mb-2">PARABÉNS!</h3>
+            <p class="text-lg text-gray-800">Sua pontuação foi salva no ranking!</p>
+            
             <div class="final-stats">
-                 <p>Tempo Jogado: <span id="win-time">--:--</span></p>
-                 <p>Erros: <span id="win-errors">0</span></p>
-                 <p>Pares Encontrados: <span>5</span></p>
+                 <p>Sua Posição no Ranking: <span id="win-rank" class="rank-highlight">--</span>º lugar</p>
+                 <p>Pontuação Final: <span id="win-score-total">0</span> pts</p>
+                 <p class="text-sm text-gray-500 font-normal mt-2">Detalhes: ⏱ <span id="win-time">0:00.00</span> | ❌ <span id="win-errors">0</span> erros</p>
             </div>
-            <button id="win-continue-button" class="modal-button">Ver Galeria</button>
+
+            <button id="win-continue-button" class="btn-primary w-full">Ver Galeria</button>
         </div>
     </div>
 
+    <!-- Modal de Derrota -->
     <div id="lose-modal" class="modal">
         <div class="modal-content">
-            <p class="text-2xl font-bold text-red-600 mb-4">Você perdeu, não encontrou todas as salas a tempo.</p>
+            <p class="text-2xl font-bold text-red-600 mb-4">O tempo limite de 5 minutos acabou!</p>
              <div class="final-stats">
-                 <p>Tempo Jogado: <span id="lose-time">--:--</span></p>
-                 <p>Erros: <span id="lose-errors">0</span></p>
                  <p>Pares Encontrados: <span id="lose-matches">0</span></p>
+                 <p>Erros: <span id="lose-errors">0</span></p>
             </div>
-            <button id="lose-continue-button" class="modal-button">Seguir</button>
+            <button id="lose-continue-button" class="btn-primary btn-secondary">Ver Galeria</button>
+            <button class="btn-primary restart-button">Tentar Novamente</button>
         </div>
     </div>
 
@@ -401,75 +436,213 @@
 
         const gameCards = [...cardArray, ...cardArray];
 
-        const startModal = document.getElementById('start-modal');
-        const startButton = document.getElementById('start-button');
+        // Elementos UI
+        const startSection = document.getElementById('start-section');
         const gameSection = document.getElementById('game-section');
         const gallerySection = document.getElementById('gallery-section');
+        
+        const winModal = document.getElementById('win-modal');
+        const loseModal = document.getElementById('lose-modal');
         
         const board = document.querySelector('.game-board');
         const scoreDisplay = document.getElementById('score');
         const errorsDisplay = document.getElementById('errors');
         const timerDisplay = document.getElementById('timer');
+        const playerNameInput = document.getElementById('player-name-input');
+        const displayPlayerName = document.getElementById('display-player-name');
+        const customToast = document.getElementById('custom-toast');
         
-        const winModal = document.getElementById('win-modal');
-        const winContinueButton = document.getElementById('win-continue-button');
-        const loseModal = document.getElementById('lose-modal');
-        const loseContinueButton = document.getElementById('lose-continue-button');
-        const galleryRestartButton = document.querySelector('#gallery-section .restart-gallery-button');
-
         let firstCard = null;
         let secondCard = null;
         let lockBoard = false;
         let matches = 0;
         let errors = 0;
-        let timeLeft = 90;
+        
+        const timeLimitMs = 300000; // 5 minutos em milissegundos
+        let startTime = 0;
+        let timePlayedMs = 0;
         let timerInterval = null;
+        let toastTimeout = null;
+        let currentPlayerName = "";
+        
+        // --- NOVA ESCALA DE PONTUAÇÃO ---
+        const PONTUACAO_BASE = 10000;
+        const PONTOS_PERDIDOS_POR_SEGUNDO = 20; 
+        const PONTOS_PERDIDOS_POR_ERRO = 150; 
+
+        // --- FUNÇÃO PARA O AVISO SUAVE ---
+        function showCustomToast(message) {
+            customToast.textContent = message;
+            customToast.classList.add('show');
+            if(toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                customToast.classList.remove('show');
+            }, 3000);
+        }
+
+        // --- SISTEMA DE RANKING (COM PROTEÇÃO DOS DADOS ANTIGOS) ---
+        function getLeaderboard() {
+            const lb = localStorage.getItem('memoriaSpaceRanking_v2');
+            if (!lb) return [];
+            
+            let parsed = JSON.parse(lb);
+            
+            // CONVERSÃO DE SEGURANÇA: Transforma os dados da "versão anterior (segundos)" para a nova (milissegundos)
+            parsed = parsed.map(item => {
+                if (item.time < 1000) { 
+                    item.time = item.time * 1000; // Ex: transforma 17 segundos em 17000 ms
+                    if(item.score < 2000) {
+                        item.score = item.score * 10; // Ex: transforma os 936 pontos em 9360
+                    }
+                }
+                return item;
+            });
+            
+            return parsed;
+        }
+
+        function saveScore(name, timeMs, errs) {
+            const lb = getLeaderboard();
+            const idUnico = Date.now(); 
+            
+            // Calcula o tempo em segundos fracionados (ex: 17.43) para descontar na pontuação precisamente
+            const timeInSeconds = timeMs / 1000;
+            
+            let pontuacaoCalculada = PONTUACAO_BASE - (timeInSeconds * PONTOS_PERDIDOS_POR_SEGUNDO) - (errs * PONTOS_PERDIDOS_POR_ERRO);
+            pontuacaoCalculada = Math.max(0, Math.floor(pontuacaoCalculada));
+            
+            const newEntry = { 
+                id: idUnico,
+                name: name, 
+                time: timeMs, 
+                errors: errs, 
+                score: pontuacaoCalculada 
+            };
+            
+            lb.push(newEntry);
+            
+            // ORDENAÇÃO EXTREMAMENTE JUSTA (Desempate automático)
+            lb.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score; // 1º Critério: Maior Pontuação Vence
+                if (a.errors !== b.errors) return a.errors - b.errors; // 2º Critério: Menos erros
+                return a.id - b.id; // 3º Critério: Quem jogou primeiro
+            });
+            
+            lb.splice(200); 
+            localStorage.setItem('memoriaSpaceRanking_v2', JSON.stringify(lb));
+
+            const rank = lb.findIndex(entry => entry.id === idUnico) + 1;
+            return { rank: rank, score: pontuacaoCalculada };
+        }
+
+        function formatTimeMs(msTotal) {
+            const totalSeconds = Math.floor(msTotal / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const hundredths = Math.floor((msTotal % 1000) / 10);
+            
+            const secStr = seconds < 10 ? '0' + seconds : seconds;
+            const hundStr = hundredths < 10 ? '0' + hundredths : hundredths;
+            
+            return `${minutes}:${secStr}.${hundStr}`;
+        }
+
+        function renderLeaderboard() {
+            const lb = getLeaderboard();
+            const top10 = lb.slice(0, 10); 
+            
+            const html = top10.length === 0 
+                ? '<li class="text-gray-500 py-4 text-center">Nenhum recorde salvo ainda. Seja o primeiro!</li>' 
+                : top10.map((entry, i) => `
+                    <li class="ranking-item">
+                        <span><b>${i + 1}º</b> ${entry.name}</span>
+                        <span class="text-sm"><b>${entry.score} pts</b> (⏱ ${formatTimeMs(entry.time)} | ❌ ${entry.errors})</span>
+                    </li>
+                `).join('');
+
+            document.getElementById('start-ranking-list').innerHTML = html;
+        }
+
+        // --- LÓGICA DO JOGO ---
+        function startGame() {
+            let typedName = playerNameInput.value.trim();
+            
+            if (typedName === "") {
+                showCustomToast("Por favor, digite seu nome para começar o jogo!");
+                playerNameInput.focus();
+                return;
+            }
+            
+            currentPlayerName = typedName;
+            displayPlayerName.textContent = currentPlayerName;
+
+            startSection.classList.add('hidden');
+            gallerySection.classList.add('hidden');
+            gameSection.classList.remove('hidden');
+            
+            createBoard();
+        }
+
+        function restartGame() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            startSection.classList.add('hidden');
+            gallerySection.classList.add('hidden');
+            gameSection.classList.remove('hidden');
+            createBoard();
+        }
+
+        function goToStart() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            gameSection.classList.add('hidden');
+            gallerySection.classList.add('hidden');
+            startSection.classList.remove('hidden');
+            playerNameInput.value = ""; 
+            renderLeaderboard();
+            if(timerInterval) clearInterval(timerInterval);
+        }
 
         function startTimer() {
-            timeLeft = 90;
+            startTime = Date.now();
             errors = 0;
             errorsDisplay.textContent = errors;
-            timerDisplay.textContent = '1:30';
-            clearInterval(timerInterval); 
+            timerDisplay.textContent = formatTimeMs(0);
+            if (timerInterval) clearInterval(timerInterval); 
 
+            // Atualiza o tempo a cada 30 milissegundos para manter o relógio visualmente fluído
             timerInterval = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                let seconds = timeLeft % 60;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-                timerDisplay.textContent = `${minutes}:${seconds}`;
+                let currentMs = Date.now() - startTime;
+                timerDisplay.textContent = formatTimeMs(currentMs);
 
-                if (timeLeft <= 0) {
+                if (currentMs >= timeLimitMs) {
                     clearInterval(timerInterval);
-                    handleLose();
+                    handleLose(currentMs);
                 }
-            }, 1000);
+            }, 30);
         }
         
-        function updateFinalStats() {
-            const timePlayed = 90 - timeLeft;
-            const minutes = Math.floor(timePlayed / 60);
-            let seconds = timePlayed % 60;
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-            const formattedTime = `${minutes}:${seconds}`;
-
-            document.getElementById('lose-time').textContent = formattedTime;
-            document.getElementById('lose-errors').textContent = errors;
-            document.getElementById('lose-matches').textContent = matches;
-
-            document.getElementById('win-time').textContent = formattedTime;
-            document.getElementById('win-errors').textContent = errors;
-        }
-
-        function handleLose() {
+        function handleLose(currentMs) {
             lockBoard = true;
-            updateFinalStats();
+            timePlayedMs = currentMs || timeLimitMs; 
+            
+            document.getElementById('lose-matches').textContent = matches;
+            document.getElementById('lose-errors').textContent = errors;
+            
             loseModal.classList.add('active');
         }
 
         function handleWin() {
             lockBoard = true;
-            updateFinalStats();
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timePlayedMs = Date.now() - startTime;
+            
+            const result = saveScore(currentPlayerName, timePlayedMs, errors);
+            
+            document.getElementById('win-rank').textContent = result.rank;
+            document.getElementById('win-score-total').textContent = result.score;
+            document.getElementById('win-time').textContent = formatTimeMs(timePlayedMs);
+            document.getElementById('win-errors').textContent = errors;
+            
             winModal.classList.add('active');
         }
 
@@ -483,8 +656,8 @@
             matches = 0;
             scoreDisplay.textContent = 0;
             errorsDisplay.textContent = 0;
-            timerDisplay.textContent = '--:--';
-
+            timerDisplay.textContent = formatTimeMs(0);
+            lockBoard = true; 
 
             gameCards.forEach((card) => {
                 const cardElement = document.createElement('div');
@@ -511,8 +684,16 @@
                 cardElement.appendChild(frontFace);
                 board.appendChild(cardElement);
 
+                cardElement.classList.add('flip');
                 cardElement.addEventListener('click', flipCard);
             });
+
+            setTimeout(() => {
+                const allCards = document.querySelectorAll('.card');
+                allCards.forEach(card => card.classList.remove('flip'));
+                lockBoard = false;
+                startTimer(); 
+            }, 1500); 
         }
 
         function flipCard() {
@@ -556,22 +737,22 @@
                 }
                 
                 if (matches === cardArray.length) { 
-                    clearInterval(timerInterval);
-                    setTimeout(handleWin, 800);
+                    setTimeout(handleWin, 400); // Aciona a vitória um pouco mais rápido
                 }
-            }, 2000); 
+            }, 1000); 
         }
 
         function unflipCards() {
             errors++;
             errorsDisplay.textContent = errors;
+            
             setTimeout(() => {
                 if (firstCard && secondCard) {
                     firstCard.classList.remove('flip');
                     secondCard.classList.remove('flip');
                 }
-                resetBoard();
-            }, 2000);
+                resetBoard(); 
+            }, 900); 
         }
 
         function resetBoard() {
@@ -580,32 +761,34 @@
 
         function showGallery() {
             gameSection.classList.add('hidden');
+            startSection.classList.add('hidden');
             gallerySection.classList.remove('hidden');
+            
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // --- EVENT LISTENERS ---
         document.addEventListener('DOMContentLoaded', () => {
-            createBoard();
+            renderLeaderboard();
             
-            startButton.addEventListener('click', () => {
-                startModal.classList.remove('active');
-                startTimer();
+            document.getElementById('start-button').addEventListener('click', startGame);
+
+            playerNameInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    startGame();
+                }
             });
 
-            loseContinueButton.addEventListener('click', () => {
-                loseModal.classList.remove('active');
-                showGallery();
+            document.getElementById('win-continue-button').addEventListener('click', showGallery);
+            document.getElementById('lose-continue-button').addEventListener('click', showGallery);
+
+            document.querySelectorAll('.restart-button').forEach(btn => {
+                btn.addEventListener('click', restartGame);
             });
 
-            winContinueButton.addEventListener('click', () => {
-                winModal.classList.remove('active');
-                showGallery();
-            });
-
-            galleryRestartButton.addEventListener('click', () => {
-                window.location.reload();
-            });
+            document.getElementById('back-to-start-button').addEventListener('click', goToStart);
         });
     </script>
 </body>
 </html>
-
